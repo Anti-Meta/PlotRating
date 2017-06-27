@@ -1,0 +1,10 @@
+# Database info
+host: "192.168.1.7"
+port: 3306
+database: "plot_rating"
+username: "greaper"
+password: "n44pzYSKqY"
+
+#Rate settings
+min-ratings: 3
+max-ratings: 5

@@ -1,0 +1,12 @@
+name: PlotRating
+version: 0.1
+author: Greaper
+main: nl.antimeta.plotrating.Main
+depend: [PlotSquared, BukkitFramework]
+commands:
+  pr-request:
+    description: Request a plot rating.
+  pr-rate:
+    description: Rate a plot.
+  plotrate:
+    description: Plot Rating commands.
