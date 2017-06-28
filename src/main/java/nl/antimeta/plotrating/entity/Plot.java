@@ -16,19 +16,19 @@ import java.util.List;
 @Entity(tableName = "pr_plot")
 public class Plot extends BaseEntity<Plot> {
 
-    @Field(fieldType = FieldType.Integer, name = "plot_id", primary = true)
+    @Field(fieldName = "plot_id", fieldType = FieldType.Integer,  primary = true)
     private Integer id;
 
-    @Field(fieldType = FieldType.Integer, name = "x_id")
+    @Field(fieldName = "x_id", fieldType = FieldType.Integer)
     private Integer plotXId;
 
-    @Field(fieldType = FieldType.Integer, name = "y_id")
+    @Field(fieldName = "y_id", fieldType = FieldType.Integer)
     private Integer plotYId;
 
-    @Field(fieldType = FieldType.Varchar, name = "playerUUID", size = 40)
+    @Field(fieldName = "playerUUID", fieldType = FieldType.Varchar , size = 40)
     private String playerUUID;
 
-    @Field(fieldType = FieldType.Varchar, name = "rate_status", size = 20)
+    @Field(fieldName = "rate_status", fieldType = FieldType.Varchar, size = 20)
     private String rateStatus;
 
     //LOCAL FIELDS

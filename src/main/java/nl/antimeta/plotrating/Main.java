@@ -2,6 +2,7 @@ package nl.antimeta.plotrating;
 
 import com.intellectualcrafters.plot.PS;
 import nl.antimeta.plotrating.command.ExecutorCommand;
+import nl.antimeta.plotrating.command.PR;
 import nl.antimeta.plotrating.command.Rate;
 import nl.antimeta.plotrating.command.Request;
 import nl.antimeta.plotrating.model.DatabaseModel;
@@ -19,11 +20,6 @@ public class Main extends JavaPlugin implements Listener {
 
     private static Main main;
 
-    private static final String MAIN = "plotrate";
-    private static final String PR_RATE = "pr-rate";
-    private static final String PR_REQUEST = "pr-request";
-    private static final String PR_STATUS = "pr-status";
-
     @Override
     public void onEnable() {
         main = this;
@@ -38,18 +34,7 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     private void setupCommands() {
-
-        Rate rate = new Rate(getConfig());
-        Request request = new Request();
-
-        ExecutorCommand executor = new ExecutorCommand();
-        executor.registerCommand(rate.SUBS, rate);
-        executor.registerCommand(request.SUBS, request);
-
-        this.getCommand(PR_RATE).setExecutor(rate);
-        this.getCommand(PR_REQUEST).setExecutor(request);
-        this.getCommand(MAIN).setExecutor(executor);
-
+        this.getCommand(Constants.MainCommand).setExecutor(new PR(getConfig()));
         this.getLogger().info("PlotRating Enabled");
     }
 
@@ -94,7 +79,7 @@ public class Main extends JavaPlugin implements Listener {
             getLogger().info(String.valueOf(databaseModel.getPort()));
             getLogger().info(databaseModel.getUsername());
             getLogger().info(databaseModel.getPassword());
-            PlotRatingDatabase database = PlotRatingDatabase.getInstance(databaseModel);
+            PlotRatingDatabase.setupInstance(databaseModel);
         } catch (Exception e) {
             e.printStackTrace();
         }

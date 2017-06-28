@@ -13,19 +13,19 @@ import java.util.List;
 @Entity(tableName = "pr_rating")
 public class Rating extends BaseEntity<Rating> {
 
-    @Field(name = "rating_id", fieldType = FieldType.Integer, primary = true)
+    @Field(fieldName = "rating_id", fieldType = FieldType.Integer, primary = true)
     private Integer id;
 
-    @Field(name = "plot_id", fieldType = FieldType.Integer)
+    @Field(fieldName = "plot_id", fieldType = FieldType.Integer)
     private Integer plotId;
 
-    @Field(name = "playerUUID", fieldType = FieldType.Varchar, size = 40)
+    @Field(fieldName = "playerUUID", fieldType = FieldType.Varchar, size = 40)
     private String playerUUID;
 
-    @Field(name = "rating", fieldType = FieldType.Integer)
+    @Field(fieldName = "rating", fieldType = FieldType.Integer)
     private Integer rating;
 
-    @Field(name = "description", fieldType = FieldType.Varchar)
+    @Field(fieldName = "description", fieldType = FieldType.Varchar)
     private String description;
 
     public Rating() {

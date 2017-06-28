@@ -26,7 +26,7 @@ public class PlotRatingDatabase {
         return instance;
     }
 
-    public static PlotRatingDatabase getInstance(DatabaseModel databaseModel) {
+    public static PlotRatingDatabase setupInstance(DatabaseModel databaseModel) {
         if (instance == null) {
             instance = new PlotRatingDatabase(databaseModel);
         }

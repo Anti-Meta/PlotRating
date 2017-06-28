@@ -1,36 +1,32 @@
 package nl.antimeta.plotrating.command;
 
 import com.intellectualcrafters.plot.object.Plot;
+import nl.antimeta.bukkit.framework.command.PlayerCommand;
+import nl.antimeta.bukkit.framework.command.model.BukkitPlayerCommand;
 import nl.antimeta.plotrating.util.PlotUtil;
 import nl.antimeta.plotrating.util.ResponseUtil;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
 public abstract class PlotCommand extends PlayerCommand {
 
     Plot basePlot;
     boolean owner;
 
-    PlotCommand(String... subCommands) {
-        super(subCommands);
-    }
-
     @Override
-    public boolean executePlayerCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Plot currentPlot = PlotUtil.getPlot(player.getLocation());
+    protected boolean onPlayerCommand(BukkitPlayerCommand bukkitPlayerCommand) {
+        Plot currentPlot = PlotUtil.getPlot(bukkitPlayerCommand.getPlayer().getLocation());
 
         if (currentPlot == null) {
-            return ResponseUtil.notAPlot(sender);
+            return ResponseUtil.notAPlot(bukkitPlayerCommand.getSender());
         } else {
             if (currentPlot.isBasePlot()) {
                 basePlot = currentPlot;
             } else {
                 basePlot = currentPlot.getBasePlot(true);
             }
-            owner = basePlot.isOwner(playerUUID);
-            return executePlayerPlotCommand(sender, cmd, label, args);
+            owner = basePlot.isOwner(bukkitPlayerCommand.getPlayerUUID());
+            return onPlotCommand(bukkitPlayerCommand);
         }
     }
 
-    abstract boolean executePlayerPlotCommand(CommandSender sender, Command cmd, String label, String[] args);
+    protected abstract boolean onPlotCommand(BukkitPlayerCommand bukkitPlayerCommand);
 }

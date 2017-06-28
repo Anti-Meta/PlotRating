@@ -1,5 +1,6 @@
 package nl.antimeta.plotrating.util;
 
+import nl.antimeta.plotrating.model.RateStatus;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -11,6 +12,34 @@ public class ResponseUtil {
 
     public static boolean requestSend(CommandSender sender) {
         return sendGood(sender, "Request send!");
+    }
+
+    public static boolean plotStatus(CommandSender sender, RateStatus rateStatus) {
+        StringBuilder message = new StringBuilder("The status of this plot is ");
+
+        switch (rateStatus) {
+            case ACCEPTED:
+                message.append("Accepted!");
+                break;
+            case PENDING:
+                message.append("Pending!");
+                break;
+            case REJECTED:
+                message.append("Rejected!");
+                break;
+            case NONE:
+                message.append("Unknown!");
+                break;
+            default:
+                message.append("Unknown!");
+                break;
+        }
+
+        return send(sender, message.toString());
+    }
+
+    public static boolean noPermission(CommandSender sender) {
+        return sendError(sender, "You do not have permission to use this permission");
     }
 
     public static boolean plotAlreadyPending(CommandSender sender) {

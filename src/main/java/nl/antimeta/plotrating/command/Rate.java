@@ -1,29 +1,35 @@
 package nl.antimeta.plotrating.command;
 
+import nl.antimeta.bukkit.framework.command.annotation.Command;
+import nl.antimeta.bukkit.framework.command.model.BukkitCommand;
+import nl.antimeta.bukkit.framework.command.model.BukkitPlayerCommand;
 import nl.antimeta.plotrating.PlotRatingDatabase;
 import nl.antimeta.plotrating.entity.Plot;
 import nl.antimeta.plotrating.entity.Rating;
 import nl.antimeta.plotrating.model.RateStatus;
 import nl.antimeta.plotrating.util.ResponseUtil;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 
+@Command(main = "rate",
+        permission = "pr.rate")
 public class Rate extends PlotCommand {
 
     private final int minRatings;
     private final int maxRatings;
 
     public Rate(FileConfiguration config) {
-        super("rate");
         minRatings = config.getInt("min-ratings");
         maxRatings = config.getInt("max-ratings");
     }
 
     @Override
-    boolean executePlayerPlotCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    protected boolean onPlotCommand(BukkitPlayerCommand bukkitPlayerCommand) {
+        String[] args = bukkitPlayerCommand.getArgs();
+        CommandSender sender = bukkitPlayerCommand.getSender();
+
         if (args.length == 0) {
             return false;
         }
@@ -32,7 +38,7 @@ public class Rate extends PlotCommand {
         if (databasePlot == null) {
             ResponseUtil.plotRateNotRequested(sender);
         } else {
-            if (databasePlot.getPlayerUUID().equals(playerUUID.toString())) {
+            if (databasePlot.getPlayerUUID().equals(bukkitPlayerCommand.getPlayerUUID().toString())) {
                 return ResponseUtil.cannotRateOwnPlot(sender);
             }
 
@@ -50,13 +56,13 @@ public class Rate extends PlotCommand {
                         } else {
 
                             for (Rating rating : currentRatings) {
-                                if (rating.getPlayerUUID().equals(playerUUID.toString())) {
+                                if (rating.getPlayerUUID().equals(bukkitPlayerCommand.getPlayerUUID().toString())) {
                                     return ResponseUtil.cannotRateThePlotMultipleTimes(sender);
                                 }
                             }
 
-                            Rating rating = new Rating(databasePlot.getId(), Integer.valueOf(args[0]), playerUUID.toString());
-                            if (args.length > 1) {
+                            Rating rating = new Rating(databasePlot.getId(), Integer.valueOf(args[0]), bukkitPlayerCommand.getPlayerUUID().toString());
+                            if (args[1] != null) {
                                 rating.setDescription(args[1]);
                             }
 
@@ -73,5 +79,10 @@ public class Rate extends PlotCommand {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onNoPermission(BukkitCommand bukkitCommand) {
+        ResponseUtil.noPermission(bukkitCommand.getSender());
     }
 }

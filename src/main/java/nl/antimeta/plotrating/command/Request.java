@@ -1,20 +1,23 @@
 package nl.antimeta.plotrating.command;
 
+import nl.antimeta.bukkit.framework.command.annotation.Command;
+import nl.antimeta.bukkit.framework.command.model.BukkitCommand;
+import nl.antimeta.bukkit.framework.command.model.BukkitPlayerCommand;
 import nl.antimeta.plotrating.PlotRatingDatabase;
 import nl.antimeta.plotrating.entity.Plot;
 import nl.antimeta.plotrating.model.RateStatus;
 import nl.antimeta.plotrating.util.ResponseUtil;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+@Command(main = "request",
+        permission = "pr.request",
+        aliases = {"req"})
 public class Request extends PlotCommand {
 
-    public Request() {
-        super("request", "req");
-    }
-
     @Override
-    boolean executePlayerPlotCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    protected boolean onPlotCommand(BukkitPlayerCommand bukkitPlayerCommand) {
+        CommandSender sender = bukkitPlayerCommand.getSender();
+
         if (owner) {
             Plot databasePlot = PlotRatingDatabase.getInstance().getPlotFromSquared(basePlot.getId().x, basePlot.getId().y);
             if (databasePlot == null) {
@@ -44,5 +47,10 @@ public class Request extends PlotCommand {
         } else {
             return ResponseUtil.notYourPlot(sender);
         }
+    }
+
+    @Override
+    protected void onNoPermission(BukkitCommand bukkitCommand) {
+        ResponseUtil.noPermission(bukkitCommand.getSender());
     }
 }
