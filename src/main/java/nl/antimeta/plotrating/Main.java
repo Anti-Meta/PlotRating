@@ -1,10 +1,8 @@
 package nl.antimeta.plotrating;
 
 import com.intellectualcrafters.plot.PS;
-import nl.antimeta.plotrating.command.ExecutorCommand;
 import nl.antimeta.plotrating.command.PR;
-import nl.antimeta.plotrating.command.Rate;
-import nl.antimeta.plotrating.command.Request;
+import nl.antimeta.plotrating.listener.OnPlotDeleteListener;
 import nl.antimeta.plotrating.model.DatabaseModel;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -26,7 +24,12 @@ public class Main extends JavaPlugin implements Listener {
         setupPlotSquired();
         setupConfig();
         setupDatabase();
+        setupListeners();
         setupCommands();
+    }
+
+    private void setupListeners() {
+        getServer().getPluginManager().registerEvents(new OnPlotDeleteListener(), this);
     }
 
     public static PluginLogger getStaticLogger() {

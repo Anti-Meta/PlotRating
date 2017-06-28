@@ -1,5 +1,6 @@
 package nl.antimeta.plotrating;
 
+import com.intellectualcrafters.plot.object.PlotId;
 import nl.antimeta.bukkit.framework.database.Dao;
 import nl.antimeta.bukkit.framework.database.Database;
 import nl.antimeta.bukkit.framework.database.model.Resource;
@@ -106,5 +107,24 @@ public class PlotRatingDatabase {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void deletePlotAndRatings(PlotId plotId) throws SQLException {
+        Plot dbPlot = getPlotFromSquared(plotId.x, plotId.y);
+        if (dbPlot != null) {
+            List<Rating> ratings = getRatings(dbPlot.getId());
+            for (Rating rating : ratings) {
+                ratingDao.delete(rating);
+            }
+            plotDao.delete(dbPlot.getId());
+        }
+    }
+
+    public Dao<Plot> getPlotDao() {
+        return plotDao;
+    }
+
+    public Dao<Rating> getRatingDao() {
+        return ratingDao;
     }
 }
