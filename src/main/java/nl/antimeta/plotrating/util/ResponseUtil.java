@@ -1,5 +1,6 @@
 package nl.antimeta.plotrating.util;
 
+import nl.antimeta.plotrating.Main;
 import nl.antimeta.plotrating.model.RateStatus;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -97,12 +98,20 @@ public class ResponseUtil {
     }
 
     private static boolean sendGood(CommandSender sender, String message) {
-        sender.sendMessage(String.format("%s" + message, ChatColor.GREEN));
+        if (sender != null) {
+            sender.sendMessage(String.format("%s" + message, ChatColor.GREEN));
+        } else {
+            Main.getStaticLogger().warning("Sender is null cannot send message!!");
+        }
         return true;
     }
 
     private static boolean sendError(CommandSender sender, String message) {
-        sender.sendMessage(String.format("%s" + message, ChatColor.RED));
+        if (sender != null) {
+            sender.sendMessage(String.format("%s" + message, ChatColor.RED));
+        } else {
+            Main.getStaticLogger().warning("Sender is null cannot send message!!");
+        }
         return true;
     }
 }
