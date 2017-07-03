@@ -40,7 +40,7 @@ public class ResponseUtil {
     }
 
     public static boolean noPermission(CommandSender sender) {
-        return sendError(sender, "You do not have permission to use this permission");
+        return sendError(sender, "You do not have permission to use this command");
     }
 
     public static boolean plotAlreadyPending(CommandSender sender) {

@@ -63,7 +63,17 @@ public class Rate extends PlotCommand {
 
                             Rating rating = new Rating(databasePlot.getId(), Integer.valueOf(args[0]), bukkitPlayerCommand.getPlayerUUID().toString());
                             if (args[1] != null) {
-                                rating.setDescription(args[1]);
+                                String description = null;
+
+                                for (int i = 1; i < args.length - 1; i++) {
+                                    if (description == null) {
+                                        description = args[i];
+                                    } else {
+                                        description = description + " " + args[i];
+                                    }
+                                }
+
+                                rating.setDescription(description);
                             }
 
                             PlotRatingDatabase.getInstance().saveRating(rating);

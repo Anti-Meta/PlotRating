@@ -2,10 +2,9 @@ package nl.antimeta.plotrating;
 
 import com.intellectualcrafters.plot.PS;
 import nl.antimeta.plotrating.command.PR;
-import nl.antimeta.plotrating.listener.OnPlotDeleteListener;
+import nl.antimeta.plotrating.listener.OnPlotClearListener;
 import nl.antimeta.plotrating.model.DatabaseModel;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginLogger;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +13,7 @@ import java.io.File;
 
 import static com.intellectualcrafters.plot.util.MainUtil.sendMessage;
 
-public class Main extends JavaPlugin implements Listener {
+public class Main extends JavaPlugin {
 
     private static Main main;
 
@@ -29,7 +28,7 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     private void setupListeners() {
-        getServer().getPluginManager().registerEvents(new OnPlotDeleteListener(), this);
+        new OnPlotClearListener(this);
     }
 
     public static PluginLogger getStaticLogger() {
@@ -70,8 +69,6 @@ public class Main extends JavaPlugin implements Listener {
             Bukkit.getServer().getPluginManager().disablePlugin(this);
             return;
         }
-
-        Bukkit.getServer().getPluginManager().registerEvents(this, this);
     }
 
     private void setupDatabase() {

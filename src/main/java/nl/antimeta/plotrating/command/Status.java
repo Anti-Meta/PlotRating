@@ -14,7 +14,8 @@ public class Status extends PlotCommand {
 
     @Override
     protected boolean onPlotCommand(BukkitPlayerCommand bukkitPlayerCommand) {
-        if (owner) {
+        String adminPermission = bukkitPlayerCommand.getPermission() + ".admin";
+        if (owner || bukkitPlayerCommand.getPlayer().hasPermission(adminPermission)) {
             Plot databasePlot = PlotRatingDatabase.getInstance().getPlotFromSquared(basePlot.getId().x, basePlot.getId().y);
             if (databasePlot != null) {
                 return ResponseUtil.plotStatus(bukkitPlayerCommand.getSender(), RateStatus.findStatus(databasePlot.getRateStatus()));
