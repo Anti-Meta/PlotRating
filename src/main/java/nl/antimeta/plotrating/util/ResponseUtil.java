@@ -7,6 +7,16 @@ import org.bukkit.command.CommandSender;
 
 public class ResponseUtil {
 
+    public static void helpCommand(CommandSender sender) {
+        sender.sendMessage(String.format(baseHelpText("request") + "Send a rate request.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
+        sender.sendMessage(String.format(baseHelpText("rate 'number' 'description'") + "Rate a pending request. Description is optional and may contain whitespaces.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
+        sender.sendMessage(String.format(baseHelpText("status") + "View the status of the current plot.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
+    }
+
+    private static String baseHelpText(String name) {
+        return "%s" + "/pr " + name + "%s" + " | " + "%s";
+    }
+
     public static boolean notAPlot(CommandSender sender) {
         return sendError(sender, "This is not a plot!");
     }

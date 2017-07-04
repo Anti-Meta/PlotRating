@@ -11,5 +11,6 @@ public class PR extends MainCommand {
         addSubCommand(new Rate(config));
         addSubCommand(new Request());
         addSubCommand(new Status());
+        addSubCommand(new Help());
     }
 }
