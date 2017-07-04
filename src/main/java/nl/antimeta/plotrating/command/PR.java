@@ -12,5 +12,6 @@ public class PR extends MainCommand {
         addSubCommand(new Request());
         addSubCommand(new Status());
         addSubCommand(new Help());
+        addSubCommand(new Pending());
     }
 }

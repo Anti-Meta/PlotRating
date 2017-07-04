@@ -1,9 +1,13 @@
 package nl.antimeta.plotrating.util;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import nl.antimeta.plotrating.Main;
+import nl.antimeta.plotrating.entity.Plot;
 import nl.antimeta.plotrating.model.RateStatus;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class ResponseUtil {
 
@@ -11,10 +15,39 @@ public class ResponseUtil {
         sender.sendMessage(String.format(baseHelpText("request") + "Send a rate request.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
         sender.sendMessage(String.format(baseHelpText("rate 'number' 'description'") + "Rate a pending request. Description is optional and may contain whitespaces.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
         sender.sendMessage(String.format(baseHelpText("status") + "View the status of the current plot.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
+        sender.sendMessage(String.format(baseHelpText("pending 'page'") + "Returns all the pending plots.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
     }
 
     private static String baseHelpText(String name) {
         return "%s" + "/pr " + name + "%s" + " | " + "%s";
+    }
+
+    public static void pendingCommand(Player sender, Plot plot) {
+        String playerName = plot.getPlayer().getName();
+        String baseMessage = playerName
+                + " plot X: " + String.valueOf(plot.getPlotXId())
+                + " Y: " + String.valueOf(plot.getPlotYId() + " | ");
+
+        TextComponent message = new TextComponent(baseMessage);
+
+        com.intellectualcrafters.plot.object.Plot squaredPlot = PlotUtil.getPlot(sender, plot.getPlotXId(), plot.getPlotYId());
+        if (squaredPlot != null) {
+            com.intellectualcrafters.plot.object.Location side = squaredPlot.getSide();
+            String worldX = String.valueOf(side.getX());
+            String worldY = String.valueOf(side.getY());
+            String worldZ = String.valueOf(side.getZ());
+            String command = "/tp " + worldX + " " + worldY + " " + worldZ;
+
+            TextComponent tpLink = new TextComponent(" [TP]");
+            tpLink.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+            message.addExtra(tpLink);
+        }
+
+        sender.spigot().sendMessage(message);
+    }
+
+    public static void pageFooter(Player sender, int page, int maxPage, int showing) {
+        send(sender, "Currently showing " + showing + "of page " + page + "/" + maxPage);
     }
 
     public static boolean notAPlot(CommandSender sender) {

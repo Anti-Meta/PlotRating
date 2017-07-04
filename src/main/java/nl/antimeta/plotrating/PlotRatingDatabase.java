@@ -8,6 +8,7 @@ import nl.antimeta.bukkit.framework.database.type.MysqlDatabaseType;
 import nl.antimeta.plotrating.entity.Plot;
 import nl.antimeta.plotrating.entity.Rating;
 import nl.antimeta.plotrating.model.DatabaseModel;
+import nl.antimeta.plotrating.model.RateStatus;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -118,6 +119,15 @@ public class PlotRatingDatabase {
             }
             plotDao.delete(dbPlot.getId());
         }
+    }
+
+    public List<Plot> findAllPendingPlots() {
+        try {
+            return plotDao.find("rate_status", RateStatus.PENDING.getStatus());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Dao<Plot> getPlotDao() {
