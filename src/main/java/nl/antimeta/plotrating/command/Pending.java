@@ -30,7 +30,7 @@ public class Pending extends PlayerCommand {
     }
 
     private void showFirstPageOfPendingPlots(Player player, List<Plot> pendingPlots) {
-        showPageOfPendingPlots(player, pendingPlots, "0");
+        showPageOfPendingPlots(player, pendingPlots, "1");
     }
 
     private void showPageOfPendingPlots(Player player, List<Plot> pendingPlots, String page) {

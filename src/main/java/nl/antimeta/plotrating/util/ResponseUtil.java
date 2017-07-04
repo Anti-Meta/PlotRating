@@ -12,14 +12,28 @@ import org.bukkit.entity.Player;
 public class ResponseUtil {
 
     public static void helpCommand(CommandSender sender) {
-        sender.sendMessage(String.format(baseHelpText("request") + "Send a rate request.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
-        sender.sendMessage(String.format(baseHelpText("rate 'number' 'description'") + "Rate a pending request. Description is optional and may contain whitespaces.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
-        sender.sendMessage(String.format(baseHelpText("status") + "View the status of the current plot.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
-        sender.sendMessage(String.format(baseHelpText("pending 'page'") + "Returns all the pending plots.", ChatColor.GREEN, ChatColor.BLACK, ChatColor.GREEN));
+        sender.sendMessage(ChatColor.DARK_AQUA + "----- " + ChatColor.AQUA + "Plot Ratings Commands" + ChatColor.DARK_AQUA + " -----");
+        sender.sendMessage(baseHelpText("request"));
+        sender.sendMessage(" - Send a rate request.");
+
+        sender.sendMessage(baseHelpText("rate <number> <desc>"));
+        sender.sendMessage(" - Rate a pending request. Description is optional and may contain whitespaces.");
+
+        sender.sendMessage(baseHelpText("status"));
+        sender.sendMessage(" - View the status of the current plot.");
+
+        sender.sendMessage(baseHelpText("pending <page>"));
+        sender.sendMessage(" - Returns all the pending plots.");
+
+        sender.sendMessage(baseHelpText("accept"));
+        sender.sendMessage(" - Accept a pending plot.");
+
+        sender.sendMessage(baseHelpText("reject"));
+        sender.sendMessage(" - Reject a pending plot.");
     }
 
     private static String baseHelpText(String name) {
-        return "%s" + "/pr " + name + "%s" + " | " + "%s";
+        return ChatColor.DARK_AQUA + "/pr " + ChatColor.AQUA + name;
     }
 
     public static void pendingCommand(Player sender, Plot plot) {
@@ -30,7 +44,7 @@ public class ResponseUtil {
 
         TextComponent message = new TextComponent(baseMessage);
 
-        com.intellectualcrafters.plot.object.Plot squaredPlot = PlotUtil.getPlot(sender, plot.getPlotXId(), plot.getPlotYId());
+        com.intellectualcrafters.plot.object.Plot squaredPlot = PlotUtil.getPlot(plot.getPlayer(), plot.getPlotXId(), plot.getPlotYId());
         if (squaredPlot != null) {
             com.intellectualcrafters.plot.object.Location side = squaredPlot.getSide();
             String worldX = String.valueOf(side.getX());
@@ -106,8 +120,21 @@ public class ResponseUtil {
         return sendError(sender, "No pending rate request found on this plot.");
     }
 
+    public static boolean plotNeedsMoreRatings(CommandSender sender, int currentRates, int minRates, RateStatus status) {
+        sendError(sender, "This plot is only rated " + currentRates + " times!");
+        return sendError(sender, "You can change the rate status to " + status.getStatus() + " only when " + minRates + " players have voted on this plot.");
+    }
+
+    public static boolean plotRateStatusChanged(CommandSender sender, RateStatus status) {
+        return sendGood(sender, "Plot status changed to " + status.getStatus() + "!");
+    }
+
     public static boolean cannotRateOwnPlot(CommandSender sender) {
         return sendError(sender, "You cannot rate on your own plot.");
+    }
+
+    public static boolean cannotChangeStatusOfOwnPlot(CommandSender sender) {
+        return sendError(sender, "You cannot change the status of your own plot");
     }
 
     public static boolean maxRatingsOnPlot(CommandSender sender) {
@@ -123,7 +150,7 @@ public class ResponseUtil {
     }
 
     public static boolean plotReachedEnoughRatings(CommandSender sender) {
-        return sendGood(sender, "Rating send! This plot reached enough rates you can now close the rating by typing '/plotrate finish' or '/pr-finish'.");
+        return sendGood(sender, "Rating send! This plot reached enough rates you can now close the rating by typing '/pr accept' or '/pr reject'.");
     }
 
     public static boolean plotRatingSend(CommandSender sender) {
