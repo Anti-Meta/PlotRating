@@ -79,7 +79,7 @@ public class Main extends JavaPlugin {
             getLogger().info(String.valueOf(databaseModel.getPort()));
             getLogger().info(databaseModel.getUsername());
             getLogger().info(databaseModel.getPassword());
-            PlotRatingDatabase.setupInstance(databaseModel);
+            PRDatabase.setupInstance(databaseModel);
         } catch (Exception e) {
             e.printStackTrace();
         }

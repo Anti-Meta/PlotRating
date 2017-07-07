@@ -1,16 +1,20 @@
 package nl.antimeta.plotrating.model;
 
+import org.bukkit.ChatColor;
+
 public enum RateStatus {
 
-    NONE("None"),
-    PENDING("Pending"),
-    REJECTED("Rejected"),
-    ACCEPTED("Accepted");
+    NONE("None", ChatColor.WHITE),
+    PENDING("Pending", ChatColor.YELLOW),
+    REJECTED("Rejected", ChatColor.RED),
+    ACCEPTED("Accepted", ChatColor.GREEN);
 
     private final String status;
+    private final ChatColor color;
 
-    RateStatus(String status) {
+    RateStatus(String status, ChatColor color) {
         this.status = status;
+        this.color = color;
     }
 
     public static RateStatus findStatus(String status) {
@@ -29,5 +33,9 @@ public enum RateStatus {
 
     public String getStatus() {
         return status;
+    }
+
+    public ChatColor getColor() {
+        return color;
     }
 }

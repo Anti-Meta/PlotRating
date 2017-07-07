@@ -3,7 +3,7 @@ package nl.antimeta.plotrating.command;
 import nl.antimeta.bukkit.framework.command.annotation.Command;
 import nl.antimeta.bukkit.framework.command.model.BukkitCommand;
 import nl.antimeta.bukkit.framework.command.model.BukkitPlayerCommand;
-import nl.antimeta.plotrating.PlotRatingDatabase;
+import nl.antimeta.plotrating.PRDatabase;
 import nl.antimeta.plotrating.entity.Plot;
 import nl.antimeta.plotrating.entity.Rating;
 import nl.antimeta.plotrating.model.RateStatus;
@@ -29,14 +29,14 @@ public class Reject extends PlotCommand {
         if (owner) {
             return ResponseUtil.cannotChangeStatusOfOwnPlot(bukkitPlayerCommand.getPlayer());
         } else {
-            Plot databasePlot = PlotRatingDatabase.getInstance().getPlotFromSquared(basePlot.getId().x, basePlot.getId().y);
+            Plot databasePlot = PRDatabase.getInstance().getPlotFromSquared(basePlot.getId().x, basePlot.getId().y);
             if (databasePlot == null) {
                 ResponseUtil.plotRateNotRequested(bukkitPlayerCommand.getPlayer());
             } else {
-                List<Rating> currentRatings = PlotRatingDatabase.getInstance().getRatings(databasePlot.getId());
+                List<Rating> currentRatings = PRDatabase.getInstance().getRatings(databasePlot);
                 if (currentRatings.size() >= minRatings) {
                     databasePlot.setRateStatus(RateStatus.REJECTED.getStatus());
-                    PlotRatingDatabase.getInstance().savePlot(databasePlot);
+                    PRDatabase.getInstance().savePlot(databasePlot);
                     ResponseUtil.plotRateStatusChanged(bukkitPlayerCommand.getPlayer(), RateStatus.REJECTED);
                 } else {
                     ResponseUtil.plotNeedsMoreRatings(bukkitPlayerCommand.getPlayer(), currentRatings.size(), minRatings, RateStatus.REJECTED);

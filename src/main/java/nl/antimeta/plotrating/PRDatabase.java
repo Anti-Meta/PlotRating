@@ -15,27 +15,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlotRatingDatabase {
+public class PRDatabase {
 
-    private static PlotRatingDatabase instance;
-
-    private Database database;
+    private static PRDatabase instance;
 
     private Dao<Plot> plotDao;
     private Dao<Rating> ratingDao;
 
-    public static PlotRatingDatabase getInstance() {
+    public static PRDatabase getInstance() {
         return instance;
     }
 
-    public static PlotRatingDatabase setupInstance(DatabaseModel databaseModel) {
+    static PRDatabase setupInstance(DatabaseModel databaseModel) {
         if (instance == null) {
-            instance = new PlotRatingDatabase(databaseModel);
+            instance = new PRDatabase(databaseModel);
         }
         return instance;
     }
 
-    private PlotRatingDatabase(DatabaseModel databaseModel) {
+    private PRDatabase(DatabaseModel databaseModel) {
         createDatabaseTables(databaseModel);
     }
 
@@ -47,7 +45,7 @@ public class PlotRatingDatabase {
         resource.setUser(databaseModel.getUsername());
         resource.setPassword(databaseModel.getPassword());
 
-        database = new Database(new MysqlDatabaseType(), resource);
+        Database database = new Database(new MysqlDatabaseType(), resource);
         try {
             database.createTable(Plot.class);
             database.createTable(Rating.class);
@@ -85,6 +83,10 @@ public class PlotRatingDatabase {
         return null;
     }
 
+    public List<Rating> getRatings(Plot plot) {
+        return getRatings(plot.getId());
+    }
+
     public List<Rating> getRatings(int plotId) {
         try {
             return ratingDao.find("plot_id", plotId);
@@ -113,7 +115,7 @@ public class PlotRatingDatabase {
     public void deletePlotAndRatings(PlotId plotId) throws SQLException {
         Plot dbPlot = getPlotFromSquared(plotId.x, plotId.y);
         if (dbPlot != null) {
-            List<Rating> ratings = getRatings(dbPlot.getId());
+            List<Rating> ratings = getRatings(dbPlot);
             for (Rating rating : ratings) {
                 ratingDao.delete(rating);
             }

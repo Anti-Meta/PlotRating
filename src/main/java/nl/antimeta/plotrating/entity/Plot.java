@@ -1,12 +1,14 @@
 package nl.antimeta.plotrating.entity;
 
 import com.plotsquared.bukkit.util.BukkitUtil;
+import com.plotsquared.bukkit.util.OfflinePlayerUtil;
 import nl.antimeta.bukkit.framework.database.annotation.Entity;
 import nl.antimeta.bukkit.framework.database.annotation.Field;
 import nl.antimeta.bukkit.framework.database.model.BaseEntity;
 import nl.antimeta.bukkit.framework.database.model.FieldType;
 import nl.antimeta.plotrating.model.RateStatus;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -98,9 +100,11 @@ public class Plot extends BaseEntity<Plot> {
 
     public Player getPlayer() {
         if (player == null && playerUUID != null) {
-            player = Bukkit.getPlayer(UUID.fromString(playerUUID));
-            if (player == null) {
-                player = Bukkit.getOfflinePlayer(UUID.fromString(playerUUID)).getPlayer();
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(playerUUID));
+            if (offlinePlayer.isOnline()) {
+                player = offlinePlayer.getPlayer();
+            } else {
+                player = OfflinePlayerUtil.loadPlayer(offlinePlayer);
             }
         }
         return player;

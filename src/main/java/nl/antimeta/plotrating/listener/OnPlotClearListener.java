@@ -2,7 +2,7 @@ package nl.antimeta.plotrating.listener;
 
 import com.plotsquared.bukkit.events.PlotClearEvent;
 import nl.antimeta.plotrating.Main;
-import nl.antimeta.plotrating.PlotRatingDatabase;
+import nl.antimeta.plotrating.PRDatabase;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -23,7 +23,7 @@ public class OnPlotClearListener implements Listener {
         Main.getStaticLogger().info("Calling onPlotDeleteEvent");
 
         try {
-            PlotRatingDatabase.getInstance().deletePlotAndRatings(event.getPlotId());
+            PRDatabase.getInstance().deletePlotAndRatings(event.getPlotId());
         } catch (SQLException e) {
             e.printStackTrace();
         }

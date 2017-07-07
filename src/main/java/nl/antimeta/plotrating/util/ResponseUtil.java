@@ -4,15 +4,18 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import nl.antimeta.plotrating.Main;
 import nl.antimeta.plotrating.entity.Plot;
+import nl.antimeta.plotrating.entity.Rating;
 import nl.antimeta.plotrating.model.RateStatus;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class ResponseUtil {
 
     public static void helpCommand(CommandSender sender) {
-        sender.sendMessage(ChatColor.DARK_AQUA + "----- " + ChatColor.AQUA + "Plot Ratings Commands" + ChatColor.DARK_AQUA + " -----");
+        sender.sendMessage(ChatColor.DARK_AQUA + "————— " + ChatColor.AQUA + "Plot Rating" + ChatColor.DARK_AQUA + " —————");
         sender.sendMessage(baseHelpText("request"));
         sender.sendMessage(" - Send a rate request.");
 
@@ -30,19 +33,46 @@ public class ResponseUtil {
 
         sender.sendMessage(baseHelpText("reject"));
         sender.sendMessage(" - Reject a pending plot.");
+        sender.sendMessage(ChatColor.DARK_AQUA + "————————————————————");
     }
 
     private static String baseHelpText(String name) {
         return ChatColor.DARK_AQUA + "/pr " + ChatColor.AQUA + name;
     }
 
-    public static void pendingCommand(Player sender, Plot plot) {
-        String playerName = plot.getPlayer().getName();
-        String baseMessage = playerName
-                + " plot X: " + String.valueOf(plot.getPlotXId())
-                + " Y: " + String.valueOf(plot.getPlotYId() + " | ");
+    public static void firstPendingCommand(Player sender, Plot plot, List<Rating> ratings) {
+        sender.sendMessage(ChatColor.DARK_AQUA + "————————————————————");
+        pendingCommand(sender, plot, ratings);
+    }
 
-        TextComponent message = new TextComponent(baseMessage);
+    public static void pendingCommand(Player sender, Plot plot, List<Rating> ratings) {
+        boolean ratedBySender = false;
+
+        for (Rating rating : ratings) {
+            ratedBySender = rating.getPlayerUUID().equals(sender.getUniqueId().toString());
+        }
+
+        StringBuilder ratingMessage = new StringBuilder("Rated by " + ratings.size() + " Players! - ");
+
+        if (ratedBySender) {
+            ratingMessage.append(ChatColor.GREEN);
+        } else {
+            ratingMessage.append(ChatColor.RED);
+        }
+
+        ratingMessage.append("[**]");
+
+        String playerName = plot.getPlayer().getName();
+        String baseMessage = "Plot x:" + String.valueOf(plot.getPlotXId())
+                + " y:" + String.valueOf(plot.getPlotYId()) + " ";
+
+        String playerMessage = ChatColor.DARK_AQUA + "Player " + ChatColor.AQUA + "-" + ChatColor.WHITE + " " + playerName;
+
+        TextComponent plotMessage = new TextComponent(baseMessage);
+        plotMessage.setColor(net.md_5.bungee.api.ChatColor.AQUA);
+
+        TextComponent message = new TextComponent();
+        message.addExtra(plotMessage);
 
         com.intellectualcrafters.plot.object.Plot squaredPlot = PlotUtil.getPlot(plot.getPlayer(), plot.getPlotXId(), plot.getPlotYId());
         if (squaredPlot != null) {
@@ -52,16 +82,21 @@ public class ResponseUtil {
             String worldZ = String.valueOf(side.getZ());
             String command = "/tp " + worldX + " " + worldY + " " + worldZ;
 
-            TextComponent tpLink = new TextComponent(" [TP]");
+            TextComponent tpLink = new TextComponent("TP");
             tpLink.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+            tpLink.setColor(net.md_5.bungee.api.ChatColor.WHITE);
+            tpLink.setUnderlined(true);
             message.addExtra(tpLink);
         }
 
+        sender.sendMessage(playerMessage);
         sender.spigot().sendMessage(message);
+        sender.sendMessage(ratingMessage.toString());
     }
 
     public static void pageFooter(Player sender, int page, int maxPage, int showing) {
-        send(sender, "Currently showing " + showing + "of page " + page + "/" + maxPage);
+        send(sender, "Currently showing " + showing + " of page " + page + "/" + maxPage);
+        sender.sendMessage(ChatColor.DARK_AQUA + "————————————————————");
     }
 
     public static boolean notAPlot(CommandSender sender) {
@@ -72,26 +107,31 @@ public class ResponseUtil {
         return sendGood(sender, "Request send!");
     }
 
-    public static boolean plotStatus(CommandSender sender, RateStatus rateStatus) {
+    public static boolean plotStatus(CommandSender sender, RateStatus rateStatus, double averageRating) {
         StringBuilder message = new StringBuilder("The status of this plot is ");
 
         switch (rateStatus) {
             case ACCEPTED:
+                message.append(rateStatus.getColor());
                 message.append("Accepted!");
                 break;
             case PENDING:
+                message.append(rateStatus.getColor());
                 message.append("Pending!");
                 break;
             case REJECTED:
+                message.append(rateStatus.getColor());
                 message.append("Rejected!");
-                break;
-            case NONE:
-                message.append("Unknown!");
                 break;
             default:
                 message.append("Unknown!");
                 break;
         }
+
+        message.append(ChatColor.WHITE);
+        message.append("With a average rating of ");
+        message.append(averageRating);
+        message.append("!");
 
         return send(sender, message.toString());
     }
@@ -101,15 +141,15 @@ public class ResponseUtil {
     }
 
     public static boolean plotAlreadyPending(CommandSender sender) {
-        return sendError(sender, "This plot is already pending.");
+        return sendError(sender, "This plot is already Pending!");
     }
 
     public static boolean plotAlreadyAccepted(CommandSender sender) {
-        return sendError(sender, "This plot is already accepted.");
+        return sendError(sender, "This plot is already Accepted!");
     }
 
     public static boolean plotAlreadyRejected(CommandSender sender) {
-        return sendError(sender, "This plot is already rejected.");
+        return sendError(sender, "This plot is already Rejected!");
     }
 
     public static boolean notYourPlot(CommandSender sender) {
@@ -117,7 +157,7 @@ public class ResponseUtil {
     }
 
     public static boolean plotRateNotRequested(CommandSender sender) {
-        return sendError(sender, "No pending rate request found on this plot.");
+        return sendError(sender, "No rate request found on this plot.");
     }
 
     public static boolean plotNeedsMoreRatings(CommandSender sender, int currentRates, int minRates, RateStatus status) {
@@ -162,11 +202,6 @@ public class ResponseUtil {
         return true;
     }
 
-    public static boolean send(CommandSender sender, String message, ChatColor color) {
-        sender.sendMessage(String.format(message, color));
-        return true;
-    }
-
     private static boolean sendGood(CommandSender sender, String message) {
         if (sender != null) {
             sender.sendMessage(String.format("%s" + message, ChatColor.GREEN));
@@ -183,5 +218,17 @@ public class ResponseUtil {
             Main.getStaticLogger().warning("Sender is null cannot send message!!");
         }
         return true;
+    }
+
+    public static void missingRating(CommandSender sender) {
+        sendError(sender, "You forgot to give this plot a rating!");
+    }
+
+    public static void wrongRating(CommandSender sender) {
+        sendError(sender, "You can only rate with numbers!");
+    }
+
+    public static void wrongRating(CommandSender sender, int minRating, int maxRating) {
+        sendError(sender, "You can only rate between " + minRating + " and " + maxRating + " !");
     }
 }

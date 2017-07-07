@@ -8,3 +8,6 @@ password: "n44pzYSKqY"
 #Rate settings
 min-ratings: 3
 max-ratings: 5
+
+min-rating: 1
+max-rating: 10

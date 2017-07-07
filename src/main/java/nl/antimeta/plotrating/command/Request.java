@@ -3,7 +3,7 @@ package nl.antimeta.plotrating.command;
 import nl.antimeta.bukkit.framework.command.annotation.Command;
 import nl.antimeta.bukkit.framework.command.model.BukkitCommand;
 import nl.antimeta.bukkit.framework.command.model.BukkitPlayerCommand;
-import nl.antimeta.plotrating.PlotRatingDatabase;
+import nl.antimeta.plotrating.PRDatabase;
 import nl.antimeta.plotrating.entity.Plot;
 import nl.antimeta.plotrating.model.RateStatus;
 import nl.antimeta.plotrating.util.ResponseUtil;
@@ -19,13 +19,13 @@ public class Request extends PlotCommand {
         CommandSender sender = bukkitPlayerCommand.getSender();
 
         if (owner) {
-            Plot databasePlot = PlotRatingDatabase.getInstance().getPlotFromSquared(basePlot.getId().x, basePlot.getId().y);
+            Plot databasePlot = PRDatabase.getInstance().getPlotFromSquared(basePlot.getId().x, basePlot.getId().y);
             if (databasePlot == null) {
                 Plot newPlot = new Plot(sender);
                 newPlot.setRateStatus(RateStatus.PENDING.getStatus());
                 newPlot.setPlotXId(basePlot.getId().x);
                 newPlot.setPlotYId(basePlot.getId().y);
-                PlotRatingDatabase.getInstance().savePlot(newPlot);
+                PRDatabase.getInstance().savePlot(newPlot);
                 return ResponseUtil.requestSend(sender);
             } else {
                 RateStatus status = RateStatus.findStatus(databasePlot.getRateStatus());
@@ -38,7 +38,7 @@ public class Request extends PlotCommand {
                         default:
                             databasePlot.setInternRateStatus(RateStatus.PENDING);
                             databasePlot.setRateStatus(RateStatus.PENDING.getStatus());
-                            PlotRatingDatabase.getInstance().savePlot(databasePlot);
+                            PRDatabase.getInstance().savePlot(databasePlot);
                             return ResponseUtil.requestSend(sender);
                     }
                 }
