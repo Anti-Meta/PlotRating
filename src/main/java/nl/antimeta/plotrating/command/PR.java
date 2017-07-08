@@ -17,5 +17,6 @@ public class PR extends MainCommand {
         addSubCommand(new Pending());
         addSubCommand(new Accept(config));
         addSubCommand(new Reject(config));
+        addSubCommand(new Remove());
     }
 }

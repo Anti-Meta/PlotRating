@@ -33,6 +33,9 @@ public class ResponseUtil {
 
         sender.sendMessage(baseHelpText("reject"));
         sender.sendMessage(" - Reject a pending plot.");
+
+        sender.sendMessage(baseHelpText("remove/delete"));
+        sender.sendMessage(" - Remove everything of the plot you are currently standing on.");
         sender.sendMessage(ChatColor.DARK_AQUA + "————————————————————");
     }
 
@@ -130,11 +133,12 @@ public class ResponseUtil {
         }
 
         message.append(ChatColor.WHITE);
-        message.append("With a average rating of ");
-        message.append(averageRating);
-        message.append("!");
-
-        return send(sender, message.toString());
+        String message2 = "With a average rating of " + averageRating + "!";
+        send(sender, ChatColor.DARK_AQUA + "————————————————————");
+        send(sender, message.toString());
+        send(sender, message2);
+        send(sender, ChatColor.DARK_AQUA + "————————————————————");
+        return true;
     }
 
     public static boolean noPermission(CommandSender sender) {
