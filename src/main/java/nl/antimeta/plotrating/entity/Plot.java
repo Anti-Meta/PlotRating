@@ -1,6 +1,5 @@
 package nl.antimeta.plotrating.entity;
 
-import com.plotsquared.bukkit.util.BukkitUtil;
 import com.plotsquared.bukkit.util.OfflinePlayerUtil;
 import nl.antimeta.bukkit.framework.database.annotation.Entity;
 import nl.antimeta.bukkit.framework.database.annotation.Field;
@@ -12,14 +11,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity(tableName = "pr_plot")
-public class Plot extends BaseEntity<Plot> {
+public class Plot extends BaseEntity {
 
     @Field(fieldName = "plot_id", fieldType = FieldType.Integer,  primary = true)
     private Integer id;
@@ -63,7 +58,7 @@ public class Plot extends BaseEntity<Plot> {
         this.id = id;
     }
 
-    @Override
+    /*@Override
     public List<Plot> buildResultSet(ResultSet resultSet) {
         List<Plot> results = new ArrayList<>();
         try {
@@ -80,7 +75,7 @@ public class Plot extends BaseEntity<Plot> {
             e.printStackTrace();
         }
         return results;
-    }
+    }*/
 
     public String getPlayerUUID() {
         return playerUUID;

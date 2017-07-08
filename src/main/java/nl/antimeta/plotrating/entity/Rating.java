@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "pr_rating")
-public class Rating extends BaseEntity<Rating> {
+public class Rating extends BaseEntity {
 
     @Field(fieldName = "rating_id", fieldType = FieldType.Integer, primary = true)
     private Integer id;
@@ -46,7 +46,7 @@ public class Rating extends BaseEntity<Rating> {
         this.id = id;
     }
 
-    @Override
+    /*@Override
     public List<Rating> buildResultSet(ResultSet resultSet) {
         List<Rating> results = new ArrayList<>();
         try {
@@ -63,7 +63,7 @@ public class Rating extends BaseEntity<Rating> {
             e.printStackTrace();
         }
         return results;
-    }
+    }*/
 
     public String getPlayerUUID() {
         return playerUUID;
