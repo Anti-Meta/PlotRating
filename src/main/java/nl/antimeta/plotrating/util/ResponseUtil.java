@@ -190,12 +190,8 @@ public class ResponseUtil {
         return sendError(sender, "Already Rated. You cannot rate multiple times on a plot.");
     }
 
-    public static boolean plotNeedMoreRatings(CommandSender sender, int minRatings, int currentRatings) {
-        return sendError(sender, "This plot need at least " + minRatings + " ratings. Currently this plot has " + currentRatings + " ratings!");
-    }
-
     public static boolean plotReachedEnoughRatings(CommandSender sender) {
-        return sendGood(sender, "Rate send! This plot reached enough rates you can now close the rating by typing '/pr accept' or '/pr reject'.");
+        return sendGood(sender, "Rate send! This plot reached enough rates you can now accept or reject this plot by typing '/pr accept' or '/pr reject'.");
     }
 
     public static boolean plotRatingSend(CommandSender sender) {
@@ -235,5 +231,13 @@ public class ResponseUtil {
 
     public static void wrongRating(CommandSender sender, int minRating, int maxRating) {
         sendError(sender, "You can only rate between " + minRating + " and " + maxRating + " !");
+    }
+
+    public static void plotCleared(CommandSender sender) {
+        sendGood(sender, "Plot has been deleted.");
+    }
+
+    public static void nothingToDelete(CommandSender sender) {
+        sendError(sender, "Nothing to delete.");
     }
 }

@@ -112,7 +112,7 @@ public class PRDatabase {
         }
     }
 
-    public void deletePlotAndRatings(PlotId plotId) throws SQLException {
+    public boolean deletePlotAndRatings(PlotId plotId) throws SQLException {
         Plot dbPlot = getPlotFromSquared(plotId.x, plotId.y);
         if (dbPlot != null) {
             List<Rating> ratings = getRatings(dbPlot);
@@ -120,7 +120,9 @@ public class PRDatabase {
                 ratingDao.delete(rating);
             }
             plotDao.delete(dbPlot.getId());
+            return true;
         }
+        return false;
     }
 
     public List<Plot> findAllPendingPlots() {

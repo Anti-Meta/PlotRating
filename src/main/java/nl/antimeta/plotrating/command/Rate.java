@@ -93,11 +93,12 @@ public class Rate extends PlotCommand {
                                 PRDatabase.getInstance().saveRating(rating);
                                 currentRatings.add(rating);
                                 if (currentRatings.size() >= minRatings) {
-                                    return ResponseUtil.plotReachedEnoughRatings(sender);
+                                    ResponseUtil.plotReachedEnoughRatings(sender);
                                 } else {
-                                    return ResponseUtil.plotRatingSend(sender);
+                                    ResponseUtil.plotRatingSend(sender);
                                 }
                             }
+                            return true;
                     }
                 }
             }

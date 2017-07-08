@@ -16,7 +16,11 @@ public class Remove extends PlotCommand {
     @Override
     protected boolean onPlotCommand(BukkitPlayerCommand bukkitPlayerCommand) {
         try {
-            PRDatabase.getInstance().deletePlotAndRatings(basePlot.getId());
+            if (PRDatabase.getInstance().deletePlotAndRatings(basePlot.getId())) {
+                ResponseUtil.plotCleared(bukkitPlayerCommand.getPlayer());
+            } else {
+                ResponseUtil.nothingToDelete(bukkitPlayerCommand.getPlayer());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
