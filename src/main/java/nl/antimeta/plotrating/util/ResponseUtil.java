@@ -52,7 +52,7 @@ public class ResponseUtil {
             ratedBySender = rating.getPlayerUUID().equals(sender.getUniqueId().toString());
         }
 
-        StringBuilder ratingMessage = new StringBuilder("Rated by " + ratings.size() + " Players! - ");
+        StringBuilder ratingMessage = new StringBuilder("Rated by " + ratings.size() + " Player(s)! - ");
 
         if (ratedBySender) {
             ratingMessage.append(ChatColor.GREEN);
@@ -92,10 +92,11 @@ public class ResponseUtil {
         sender.sendMessage(playerMessage);
         sender.spigot().sendMessage(message);
         sender.sendMessage(ratingMessage.toString());
+        sender.sendMessage(ChatColor.DARK_AQUA + "————————————————————");
     }
 
     public static void pageFooter(Player sender, int page, int maxPage, int showing) {
-        send(sender, "Currently showing " + showing + " of page " + page + "/" + maxPage);
+        send(sender, "Currently showing " + showing + RateStatus.PENDING.getColor() + " pending " + ChatColor.WHITE + "plots of page " + page + "/" + maxPage);
         sender.sendMessage(ChatColor.DARK_AQUA + "————————————————————");
     }
 
@@ -190,11 +191,11 @@ public class ResponseUtil {
     }
 
     public static boolean plotReachedEnoughRatings(CommandSender sender) {
-        return sendGood(sender, "Rating send! This plot reached enough rates you can now close the rating by typing '/pr accept' or '/pr reject'.");
+        return sendGood(sender, "Rate send! This plot reached enough rates you can now close the rating by typing '/pr accept' or '/pr reject'.");
     }
 
     public static boolean plotRatingSend(CommandSender sender) {
-        return sendGood(sender, "Rating send!");
+        return sendGood(sender, "Rate send!");
     }
 
     public static boolean send(CommandSender sender, String message) {
