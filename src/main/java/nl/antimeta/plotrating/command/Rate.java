@@ -8,7 +8,7 @@ import nl.antimeta.plotrating.entity.Plot;
 import nl.antimeta.plotrating.entity.Rating;
 import nl.antimeta.plotrating.model.RateStatus;
 import nl.antimeta.plotrating.util.ResponseUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -40,7 +40,7 @@ public class Rate extends PlotCommand {
             return true;
         }
 
-        if (!StringUtils.isNumeric(args[0])) {
+        if (!NumberUtils.isNumber(args[0])) {
             ResponseUtil.wrongRating(sender);
             return true;
         }
