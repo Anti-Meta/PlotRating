@@ -34,6 +34,10 @@ public class Rate extends PlotCommand {
     protected boolean onPlotCommand(BukkitPlayerCommand bukkitPlayerCommand) {
         String[] args = bukkitPlayerCommand.getArgs();
         CommandSender sender = bukkitPlayerCommand.getSender();
+        
+        if (owner) {
+            return ResponseUtil.cannotRateOwnPlot(sender);
+        }
 
         if (args.length == 0) {
             ResponseUtil.missingRating(sender);
@@ -52,10 +56,6 @@ public class Rate extends PlotCommand {
             if (databasePlot == null) {
                 ResponseUtil.plotRateNotRequested(sender);
             } else {
-                if (databasePlot.getPlayerUUID().equals(bukkitPlayerCommand.getPlayerUUID().toString())) {
-                    return ResponseUtil.cannotRateOwnPlot(sender);
-                }
-
                 RateStatus status = RateStatus.findStatus(databasePlot.getRateStatus());
                 if (status != null) {
                     switch (status) {

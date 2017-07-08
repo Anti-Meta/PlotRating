@@ -34,7 +34,7 @@ public class ResponseUtil {
         sender.sendMessage(baseHelpText("reject"));
         sender.sendMessage(" - Reject a pending plot.");
 
-        sender.sendMessage(baseHelpText("remove/delete"));
+        sender.sendMessage(baseHelpText("remove/delete/clear"));
         sender.sendMessage(" - Remove everything of the plot you are currently standing on.");
         sender.sendMessage(ChatColor.DARK_AQUA + "————————————————————");
     }

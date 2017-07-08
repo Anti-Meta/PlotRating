@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 @Command(main = "remove",
         permission = "pr.remove",
-        aliases = {"delete"})
+        aliases = {"delete", "clear"})
 public class Remove extends PlotCommand {
 
     @Override
