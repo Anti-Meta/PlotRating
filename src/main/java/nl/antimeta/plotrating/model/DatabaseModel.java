@@ -2,8 +2,6 @@ package nl.antimeta.plotrating.model;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseModel {

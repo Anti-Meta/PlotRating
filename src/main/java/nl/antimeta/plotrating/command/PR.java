@@ -4,8 +4,6 @@ import nl.antimeta.bukkit.framework.command.MainCommand;
 import nl.antimeta.plotrating.Constants;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import static nl.antimeta.plotrating.Constants.Auteur;
-
 public class PR extends MainCommand {
     public PR(FileConfiguration config) {
         super(Constants.MainCommand, Constants.Auteur);

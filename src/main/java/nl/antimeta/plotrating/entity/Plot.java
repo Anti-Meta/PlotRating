@@ -58,25 +58,6 @@ public class Plot extends BaseEntity {
         this.id = id;
     }
 
-    /*@Override
-    public List<Plot> buildResultSet(ResultSet resultSet) {
-        List<Plot> results = new ArrayList<>();
-        try {
-            while (resultSet.next()) {
-                Plot plot = new Plot();
-                plot.setId(resultSet.getInt("plot_id"));
-                plot.setPlotXId(resultSet.getInt("x_id"));
-                plot.setPlotYId(resultSet.getInt("y_id"));
-                plot.setPlayerUUID(resultSet.getString("playerUUID"));
-                plot.setRateStatus(resultSet.getString("rate_status"));
-                results.add(plot);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return results;
-    }*/
-
     public String getPlayerUUID() {
         return playerUUID;
     }

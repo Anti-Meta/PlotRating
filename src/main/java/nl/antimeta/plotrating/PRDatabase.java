@@ -10,7 +10,7 @@ import nl.antimeta.plotrating.entity.Rating;
 import nl.antimeta.plotrating.model.DatabaseModel;
 import nl.antimeta.plotrating.model.RateStatus;
 
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
